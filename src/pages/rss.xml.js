@@ -1,7 +1,7 @@
 import rss from '@astrojs/rss';
 import { getCollection } from 'astro:content';
 
-export async function GET(context: any) {
+export async function GET(context) {
   const tutorials = await getCollection('tutorials');
   const methods = await getCollection('methods');
   const posts = [...tutorials, ...methods]
