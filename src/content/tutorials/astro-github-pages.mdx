@@ -1,0 +1,50 @@
+---
+title: "Setting Up an Astro Blog on GitHub Pages"
+description: "A step-by-step tutorial for scaffolding an Astro content site and deploying it to a custom subdomain with GitHub Actions."
+pubDate: 2026-07-08
+tags: ["astro", "github-pages", "static-site"]
+draft: false
+---
+
+## Why Astro
+
+Astro ships zero JavaScript by default and treats your content as a first-class
+citizen. For a tutorials-and-methods blog that is exactly what you want: fast
+pages, MDX for rich content, and a clean deploy story.
+
+## Scaffold the project
+
+```bash
+npm create astro@latest
+# choose: Empty, TypeScript strict, install deps
+npm install @astrojs/mdx @astrojs/rss @astrojs/sitemap
+```
+
+## Content collections
+
+Define a schema so every post is typed and consistent:
+
+```ts
+import { defineCollection, z } from 'astro:content';
+import { glob } from 'astro/loaders';
+
+const posts = defineCollection({
+  loader: glob({ pattern: '**/*.mdx', base: './src/content/tutorials' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    pubDate: z.coerce.date(),
+    tags: z.array(z.string()).default([]),
+  }),
+});
+
+export const collections = { tutorials: posts };
+```
+
+## Deploy to a subdomain
+
+Add a `CNAME` file with your subdomain and a Pages workflow that builds and
+uploads `./dist`. Point a DNS `CNAME` record at `youruser.github.io`.
+
+> The apex `harrydev.one` already runs on GitHub Pages, so a
+> `writeups.harrydev.one` CNAME stays in the same DNS zone.

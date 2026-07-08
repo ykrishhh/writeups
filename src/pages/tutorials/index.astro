@@ -1,0 +1,20 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+
+const posts = (await getCollection('tutorials'))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<BaseLayout title="Tutorials" description="Step-by-step tutorials.">
+  <section class="section container">
+    <div class="section-head"><h2>Tutorials</h2></div>
+    <div class="grid">
+      {posts.map((p) => (
+        <div class="reveal"><PostCard post={p} kind="tutorials" /></div>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

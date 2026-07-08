@@ -1,0 +1,40 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import LoadingScreen from '../components/LoadingScreen.astro';
+import Hero from '../components/Hero.astro';
+import PostCard from '../components/PostCard.astro';
+
+const byDate = (a: any, b: any) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
+const tutorials = (await getCollection('tutorials')).filter((p) => !p.data.draft).sort(byDate);
+const methods = (await getCollection('methods')).filter((p) => !p.data.draft).sort(byDate);
+---
+
+<BaseLayout title="Writeups" description="Practical tutorials and reusable methods for builders.">
+  <LoadingScreen />
+  <Hero />
+
+  <section class="section container">
+    <div class="section-head">
+      <h2>Tutorials</h2>
+      <a href="/tutorials">All tutorials →</a>
+    </div>
+    <div class="grid">
+      {tutorials.slice(0, 3).map((p) => (
+        <div class="reveal"><PostCard post={p} kind="tutorials" /></div>
+      ))}
+    </div>
+  </section>
+
+  <section class="section container">
+    <div class="section-head">
+      <h2>Methods</h2>
+      <a href="/methods">All methods →</a>
+    </div>
+    <div class="grid">
+      {methods.slice(0, 3).map((p) => (
+        <div class="reveal"><PostCard post={p} kind="methods" /></div>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

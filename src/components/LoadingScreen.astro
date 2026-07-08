@@ -1,0 +1,49 @@
+---
+// Loading screen — faithful Astro port of the MotionSites "Dark Portfolio Hero" loader.
+// 2.7s run: rotating words (Design → Create → Inspire), 000→100 counter,
+// accent-gradient progress bar with glow, then fade out and reveal the page.
+---
+
+<div id="loader" class="loader">
+  <span class="loader-label">Writeups</span>
+  <span id="loader-word" class="loader-word">Design</span>
+  <span id="loader-count" class="loader-count">000</span>
+  <div class="loader-progress"><div id="loader-bar" class="loader-bar"></div></div>
+</div>
+
+<script>
+  (function () {
+    const loader = document.getElementById('loader');
+    const word = document.getElementById('loader-word');
+    const count = document.getElementById('loader-count');
+    const bar = document.getElementById('loader-bar');
+    if (!loader) return;
+
+    const words = ['Design', 'Create', 'Inspire'];
+    let wi = 0;
+    const wordTimer = setInterval(() => {
+      wi = (wi + 1) % words.length;
+      if (word) word.textContent = words[wi];
+    }, 900);
+
+    const DURATION = 2700;
+    const start = performance.now();
+    function tick(now) {
+      const t = Math.min(1, (now - start) / DURATION);
+      const val = Math.round(t * 100);
+      if (count) count.textContent = String(val).padStart(3, '0');
+      if (bar) bar.style.transform = `scaleX(${t})`;
+      if (t < 1) {
+        requestAnimationFrame(tick);
+      } else {
+        clearInterval(wordTimer);
+        setTimeout(() => {
+          loader.classList.add('done');
+          document.body.classList.add('go');
+          setTimeout(() => loader.remove(), 600);
+        }, 400);
+      }
+    }
+    requestAnimationFrame(tick);
+  })();
+</script>

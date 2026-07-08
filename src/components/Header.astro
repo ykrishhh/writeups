@@ -1,0 +1,24 @@
+---
+const path = Astro.url.pathname;
+const links = [
+  { href: '/', label: 'Home' },
+  { href: '/tutorials', label: 'Tutorials' },
+  { href: '/methods', label: 'Methods' },
+  { href: '/about', label: 'About' },
+  { href: '/rss.xml', label: 'RSS' },
+];
+---
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="brand" href="/">
+      <span class="ring">W</span>writeups<span class="brand-dot">.</span>
+    </a>
+    <nav>
+      {links.map((l) => (
+        <a href={l.href} class={path === l.href ? 'active' : ''}>{l.label}</a>
+      ))}
+      <a class="say-hi" href="/about">Say hi ↗</a>
+    </nav>
+  </div>
+</header>

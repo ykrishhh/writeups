@@ -1,0 +1,60 @@
+---
+// Hero — Astro port of the MotionSites "Dark Portfolio Hero":
+// Mux HLS background video, eyebrow badge, big italic display name,
+// cycling role line, bio, dual CTAs, scroll indicator.
+const path = Astro.url.pathname;
+const links = [
+  { href: '/', label: 'Home' },
+  { href: '/tutorials', label: 'Tutorials' },
+  { href: '/methods', label: 'Methods' },
+  { href: '/about', label: 'About' },
+  { href: '/rss.xml', label: 'RSS' },
+];
+const VIDEO = 'https://stream.mux.com/Gs3wZfrtz6ZfqZqQ02c02Z7lugV00FGZvRpcqFTel66r3g.m3u8';
+---
+
+<section class="hero">
+  <div class="hero-video">
+    <video id="hero-video" autoplay muted loop playsinline></video>
+    <div class="hero-video-overlay"></div>
+    <div class="hero-fade"></div>
+  </div>
+
+  <div class="hero-content">
+    <p class="eyebrow blur-in"><span class="dot"></span>WRITEUPS '26</p>
+    <h1 class="name-reveal">Writeups</h1>
+    <p class="hero-role blur-in">Practical <span id="cycler">tutorials</span> for builders.</p>
+    <p class="hero-bio blur-in">Field-tested tutorials and reusable methods — written to be read, copied, and shipped.</p>
+    <div class="cta-row blur-in">
+      <a class="btn btn-primary" href="/tutorials">Browse tutorials</a>
+      <a class="btn btn-ghost" href="/methods">Explore methods</a>
+    </div>
+  </div>
+
+  <div class="scroll-ind"><span>Scroll</span><div class="line"></div></div>
+</section>
+
+<script define:vars={{ VIDEO }}>
+  // Mux HLS background (hls.js for non-Safari, native for Safari)
+  const video = document.getElementById('hero-video');
+  if (video) {
+    if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = VIDEO;
+    } else if (window.Hls && window.Hls.isSupported()) {
+      const hls = new window.Hls();
+      hls.loadSource(VIDEO);
+      hls.attachMedia(video);
+    }
+  }
+  // Cycling role word
+  const cycler = document.getElementById('cycler');
+  const words = ['tutorials', 'methods', 'field notes'];
+  let i = 0;
+  setInterval(() => {
+    i = (i + 1) % words.length;
+    if (cycler) {
+      cycler.style.opacity = '0';
+      setTimeout(() => { cycler.textContent = words[i]; cycler.style.opacity = '1'; }, 250);
+    }
+  }, 2000);
+</script>

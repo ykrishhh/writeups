@@ -1,0 +1,15 @@
+---
+const { post, kind } = Astro.props;
+const url = `/${kind}/${post.id}`;
+---
+
+<a class="card" href={url}>
+  <p class="kicker">{kind}</p>
+  <h3>{post.data.title}</h3>
+  <p class="card-desc">{post.data.description}</p>
+  <p class="meta">
+    <time datetime={post.data.pubDate.toISOString()}>
+      {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+    </time>
+  </p>
+</a>
