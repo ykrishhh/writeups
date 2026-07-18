@@ -2,10 +2,8 @@ import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 
-// Default GitHub Pages project domain: ykrishhh.github.io/writeups
-// `base` is required so assets resolve under the /writeups subpath.
+// Subdomain: writeups.harrydev.one
 export default defineConfig({
-  site: 'https://harrydev.one/writeups',
-  base: '/writeups',
+  site: 'https://writeups.harrydev.one',
   integrations: [mdx(), sitemap()],
 });
