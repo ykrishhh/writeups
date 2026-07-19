@@ -10,45 +10,45 @@ export interface StarredRepo {
 
 export const starred: StarredRepo[] = [
   {
-    name: "ESP32-HARNESS",
-    url: "https://github.com/ykrishhh/ESP32-HARNESS",
-    desc: "ESP32 pentesting firmware for hardware and RF security work.",
-    stars: 12,
-    lang: "C",
+    "name": "termux-security-toolkit",
+    "url": "https://github.com/ykrishhh/termux-security-toolkit",
+    "desc": "Security tools and scripts for Termux: network scanning, password auditing, and pentesting on Android",
+    "stars": 5,
+    "lang": ""
   },
   {
-    name: "termux-security-toolkit",
-    url: "https://github.com/ykrishhh/termux-security-toolkit",
-    desc: "Security tooling packaged for Termux on Android.",
-    stars: 9,
-    lang: "Shell",
+    "name": "awesome-esp32-security",
+    "url": "https://github.com/ykrishhh/awesome-esp32-security",
+    "desc": "Curated list of ESP32 security tools, firmware, and resources for penetration testers and IoT researchers",
+    "stars": 2,
+    "lang": ""
   },
   {
-    name: "ou-hunt-report",
-    url: "https://github.com/ykrishhh/ou-hunt-report",
-    desc: "OU.edu red team hunt: six CVE validations and writeups.",
-    stars: 7,
-    lang: "Markdown",
+    "name": "ou-hunt-report",
+    "url": "https://github.com/ykrishhh/ou-hunt-report",
+    "desc": "OU.edu Red Team Hunt: 6 validated vulnerabilities with proof-of-concept exploits",
+    "stars": 1,
+    "lang": "Python"
   },
   {
-    name: "awesome-esp32-security",
-    url: "https://github.com/ykrishhh/awesome-esp32-security",
-    desc: "Curated ESP32 security resources and references.",
-    stars: 5,
-    lang: "Markdown",
+    "name": "security-research",
+    "url": "https://github.com/ykrishhh/security-research",
+    "desc": "Security research 2026: Android, Linux, ESP32, and offensive security",
+    "stars": 1,
+    "lang": ""
   },
   {
-    name: "cve-pocs",
-    url: "https://github.com/ykrishhh/cve-pocs",
-    desc: "Proof-of-concept exploits for disclosed CVEs.",
-    stars: 4,
-    lang: "Python",
+    "name": "android-rooting-masterclass",
+    "url": "https://github.com/ykrishhh/android-rooting-masterclass",
+    "desc": "Guide to Android rooting and hooking, from user-space DEX editing to Xposed/LSPosed and KernelPatch with eBPF",
+    "stars": 1,
+    "lang": ""
   },
   {
-    name: "pypentest-ai",
-    url: "https://github.com/ykrishhh/pypentest-ai",
-    desc: "AI-assisted pentesting helpers.",
-    stars: 3,
-    lang: "Python",
-  },
+    "name": "HarryPanel",
+    "url": "https://github.com/ykrishhh/HarryPanel",
+    "desc": "Web hosting control panel: server management, database admin, file manager, and deployment tools",
+    "stars": 1,
+    "lang": "HTML"
+  }
 ];
