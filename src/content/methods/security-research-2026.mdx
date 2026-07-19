@@ -1,0 +1,65 @@
+---
+title: "Security Research 2026 — Android, Linux, ESP32, OffSec"
+description: "A living collection of security research notes covering Android internals, Linux kernel hardening, ESP32 firmware analysis, and offensive security techniques."
+pubDate: 2026-01-01
+updatedDate: 2026-06-15
+tags: ["research", "android", "linux", "esp32", "offsec"]
+draft: false
+---
+
+## Research areas
+
+This document captures ongoing security research across four domains. Each
+section links to the relevant tools, PoCs, and writeups.
+
+## Android internals
+
+Current focus areas:
+
+- **eBPF-based root detection** — how Google's kernel-level detection works
+  and methods for bypassing it (see the Android Root tutorial)
+- **KernelSU internals** — kernel patching without modifying system partitions
+- **Frida gadget injection** — hooking non-debuggable apps via LD_PRELOAD
+
+Key repo: [android-reverse-engineering](https://github.com/ykrishhh/android-reverse-engineering)
+
+## Linux kernel hardening
+
+Research into CIS benchmarks and kernel parameter hardening:
+
+- `kernel.kptr_restrict=2` — hide kernel pointers
+- `kernel.dmesg_restrict=1` — restrict dmesg
+- `net.core.bpf_jit_enable=0` — disable BPF JIT
+- `kernel.unprivileged_bpf_disabled=1` — restrict BPF to root
+
+Key repo: [linux-hardening](https://github.com/ykrishhh/linux-hardening)
+
+## ESP32 firmware security
+
+The ESP32 ecosystem has unique attack surfaces:
+
+- **OTA update interception** — capturing and modifying over-the-air firmware
+  updates
+- **Flash encryption bypass** — side-channel attacks on ESP32 flash encryption
+- **Bluetooth Low Energy sniffing** — passive BLE packet capture with the
+  ESP32's built-in radio
+
+Key repo: [awesome-esp32-security](https://github.com/ykrishhh/awesome-esp32-security)
+
+## Offensive security methodology
+
+Tools and techniques in active use:
+
+- **AI-assisted recon** — using local LLMs to parse scan data and prioritize
+  targets (see the AI Pentesting Pipeline method)
+- **Chain-based reporting** — structuring findings as attack chains rather
+  than isolated CVEs (see the Red Team Methodology)
+- **Automated PoC generation** — template-based exploit scaffolding
+
+## Repositories
+
+| Repo | Focus | Stars |
+|------|-------|-------|
+| [security-research](https://github.com/ykrishhh/security-research) | Central research log | ★1 |
+| [cve-pocs](https://github.com/ykrishhh/cve-pocs) | CVE proof-of-concepts | ★1 |
+| [pypentest-ai](https://github.com/ykrishhh/pypentest-ai) | AI-powered pentesting | ★0 |

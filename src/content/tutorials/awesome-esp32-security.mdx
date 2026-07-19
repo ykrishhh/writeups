@@ -1,0 +1,45 @@
+---
+title: "Awesome ESP32 Security — Curated Tools & Resources"
+description: "A curated list of ESP32 security tools, firmware analysis frameworks, and IoT research resources for penetration testers and hardware hackers."
+pubDate: 2026-05-01
+tags: ["awesome", "esp32", "iot", "curated-list"]
+draft: false
+---
+
+## Overview
+
+The ESP32 is the most ubiquitous IoT microcontroller. Its built-in Wi-Fi,
+Bluetooth, and BLE make it a prime target for security research — and a
+powerful platform for building audit tools.
+
+This article is a living index of the best ESP32 security resources.
+
+## Firmware analysis
+
+| Tool | Description |
+|------|-------------|
+| [ESP32-HARNESS](https://github.com/ykrishhh/ESP32-HARNESS) | Custom pentesting firmware — 2.4 GHz audit, RF24, forensics |
+| [esp32-hacking-guide](https://github.com/ykrishhh/esp32-hacking-guide) | Complete guide: firmware analysis, WiFi attacks, BLE exploitation |
+| [esptool](https://github.com/espressif/esptool) | Official Espressif flash tool — dump, write, verify flash |
+| [esp-idf](https://github.com/espressif/esp-idf) | Official SDK — build custom firmware from source |
+
+## Wireless auditing
+
+- **WiFi:** Promiscuous mode sniffing with ESP32 radio
+- **BLE:** Passive scanning with `esp_ble_gap_start_scanning()`
+- **RF24:** NRF24L01+ integration for sub-GHz research
+
+## On-device forensics
+
+The ESP32-HARNESS firmware exposes captured data over USB mass storage,
+allowing forensic extraction without additional hardware:
+
+```
+[ESP32] ←UART→ [Host] — capture to flash
+[ESP32] ←USB→ [Host] — mount as FAT, extract logs
+```
+
+## Related resources
+
+- [awesome-esp32-security](https://github.com/ykrishhh/awesome-esp32-security) — the full curated list
+- [awesome-ai-security-tools](https://github.com/ykrishhh/awesome-ai-security-tools) — AI security tooling

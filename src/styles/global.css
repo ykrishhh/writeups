@@ -248,6 +248,25 @@ body.go .blur-in:nth-of-type(4) { animation-delay: 0.5s; }
 .site-footer { border-top: 1px solid var(--stroke); margin-top: 80px; padding: 40px 0; color: var(--muted); font-size: 14px; }
 .site-footer .muted { opacity: 0.6; font-size: 13px; margin: 4px 0 0; }
 
+/* ---------- Repo cards ---------- */
+.repo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+.repo-card {
+  display: block; padding: 20px; border-radius: 14px;
+  background: var(--glass); border: 1px solid var(--glass-border);
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+.repo-card:hover {
+  transform: translateY(-3px);
+  background: linear-gradient(var(--surface), var(--surface)) padding-box, var(--accent-grad) border-box;
+}
+.repo-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 8px; }
+.repo-name { font-size: 15px; font-weight: 600; color: var(--text); }
+.repo-stars { font-size: 13px; color: var(--accent-from); white-space: nowrap; }
+.repo-desc { font-size: 13px; color: var(--muted); margin: 0; line-height: 1.5; }
+
+/* ---------- Link row ---------- */
+.link-row { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+
 /* ---------- Reveal on scroll ---------- */
 .reveal { opacity: 0; transform: translateY(22px); }
 .reveal.in { opacity: 1; transform: none; transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1), transform 0.7s cubic-bezier(0.4, 0, 0.2, 1); }

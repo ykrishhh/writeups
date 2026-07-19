@@ -8,12 +8,37 @@ import PostCard from '../components/PostCard.astro';
 const byDate = (a: any, b: any) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
 const tutorials = (await getCollection('tutorials')).filter((p) => !p.data.draft).sort(byDate);
 const methods = (await getCollection('methods')).filter((p) => !p.data.draft).sort(byDate);
+const allPosts = [...tutorials, ...methods].sort(byDate);
+const featured = allPosts.slice(0, 3);
+
+const trendingRepos = [
+  { name: "termux-security-toolkit", desc: "Security tools for Termux", stars: 5, url: "https://github.com/ykrishhh/termux-security-toolkit" },
+  { name: "awesome-esp32-security", desc: "Curated ESP32 security resources", stars: 2, url: "https://github.com/ykrishhh/awesome-esp32-security" },
+  { name: "ou-hunt-report", desc: "OU.edu Red Team Hunt — 6 vulns", stars: 1, url: "https://github.com/ykrishhh/ou-hunt-report" },
+  { name: "cve-pocs", desc: "Proof-of-concept exploits", stars: 1, url: "https://github.com/ykrishhh/cve-pocs" },
+  { name: "ESP32-HARNESS", desc: "ESP32 pentesting firmware", stars: 1, url: "https://github.com/ykrishhh/ESP32-HARNESS" },
+  { name: "pypentest-ai", desc: "AI-powered pentesting", stars: 0, url: "https://github.com/ykrishhh/pypentest-ai" },
+].sort((a, b) => b.stars - a.stars).slice(0, 4);
 ---
 
-<BaseLayout title="Writeups" description="Practical tutorials and reusable methods for builders.">
+<BaseLayout title="Writeups" description="Practical tutorials, reusable methods, and security research.">
   <LoadingScreen />
   <Hero />
 
+  <!-- Featured / Latest -->
+  <section class="section container">
+    <div class="section-head">
+      <h2>Latest</h2>
+    </div>
+    <div class="grid">
+      {featured.map((p) => {
+        const kind = tutorials.includes(p) ? 'tutorials' : 'methods';
+        return <div class="reveal"><PostCard post={p} kind={kind} /></div>;
+      })}
+    </div>
+  </section>
+
+  <!-- Tutorials -->
   <section class="section container">
     <div class="section-head">
       <h2>Tutorials</h2>
@@ -26,6 +51,7 @@ const methods = (await getCollection('methods')).filter((p) => !p.data.draft).so
     </div>
   </section>
 
+  <!-- Methods -->
   <section class="section container">
     <div class="section-head">
       <h2>Methods</h2>
@@ -35,6 +61,35 @@ const methods = (await getCollection('methods')).filter((p) => !p.data.draft).so
       {methods.slice(0, 3).map((p) => (
         <div class="reveal"><PostCard post={p} kind="methods" /></div>
       ))}
+    </div>
+  </section>
+
+  <!-- Trending Repos -->
+  <section class="section container">
+    <div class="section-head">
+      <h2>Trending Repos</h2>
+      <a href="https://github.com/ykrishhh?tab=repositories" target="_blank">All repos →</a>
+    </div>
+    <div class="repo-grid">
+      {trendingRepos.map((r) => (
+        <a href={r.url} target="_blank" rel="noopener noreferrer" class="repo-card reveal">
+          <div class="repo-top">
+            <span class="repo-name">{r.name}</span>
+            <span class="repo-stars">★ {r.stars}</span>
+          </div>
+          <p class="repo-desc">{r.desc}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Quick links -->
+  <section class="section container" style="text-align:center;padding-bottom:80px;">
+    <div class="link-row">
+      <a href="/about" class="btn btn-ghost">About this site</a>
+      <a href="https://harrydev.one" target="_blank" class="btn btn-ghost">harrydev.one</a>
+      <a href="https://github.com/ykrishhh" target="_blank" class="btn btn-ghost">GitHub</a>
+      <a href="/rss.xml" class="btn btn-ghost">RSS</a>
     </div>
   </section>
 </BaseLayout>
