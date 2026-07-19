@@ -4,21 +4,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import LoadingScreen from '../components/LoadingScreen.astro';
 import Hero from '../components/Hero.astro';
 import PostCard from '../components/PostCard.astro';
+import { trending } from '../data/trending';
+import { starred } from '../data/starred';
 
 const byDate = (a: any, b: any) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
 const tutorials = (await getCollection('tutorials')).filter((p) => !p.data.draft).sort(byDate);
 const methods = (await getCollection('methods')).filter((p) => !p.data.draft).sort(byDate);
 const allPosts = [...tutorials, ...methods].sort(byDate);
 const featured = allPosts.slice(0, 3);
-
-const trendingRepos = [
-  { name: "termux-security-toolkit", desc: "Security tools for Termux", stars: 5, url: "https://github.com/ykrishhh/termux-security-toolkit" },
-  { name: "awesome-esp32-security", desc: "Curated ESP32 security resources", stars: 2, url: "https://github.com/ykrishhh/awesome-esp32-security" },
-  { name: "ou-hunt-report", desc: "OU.edu Red Team Hunt: 6 CVE validations", stars: 1, url: "https://github.com/ykrishhh/ou-hunt-report" },
-  { name: "cve-pocs", desc: "Proof-of-concept exploits", stars: 1, url: "https://github.com/ykrishhh/cve-pocs" },
-  { name: "ESP32-HARNESS", desc: "ESP32 pentesting firmware", stars: 1, url: "https://github.com/ykrishhh/ESP32-HARNESS" },
-  { name: "pypentest-ai", desc: "AI-powered pentesting", stars: 0, url: "https://github.com/ykrishhh/pypentest-ai" },
-].sort((a, b) => b.stars - a.stars).slice(0, 4);
 ---
 
 <BaseLayout title="Writeups" description="Tutorials and methods from security and automation work.">
@@ -64,14 +57,33 @@ const trendingRepos = [
     </div>
   </section>
 
-  <!-- Trending Repos -->
+  <!-- Trending (external, web-curated) -->
   <section class="section container">
     <div class="section-head">
-      <h2>Repos</h2>
+      <h2>Trending</h2>
+      <span class="muted-note">External repos worth watching</span>
+    </div>
+    <div class="repo-grid">
+      {trending.map((r) => (
+        <a href={r.url} target="_blank" rel="noopener noreferrer" class="repo-card reveal">
+          <div class="repo-top">
+            <span class="repo-name">{r.name}</span>
+            <span class="repo-tag">{r.topic}</span>
+          </div>
+          <p class="repo-desc">{r.desc}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Most-Starred (your repos, fetched at build) -->
+  <section class="section container">
+    <div class="section-head">
+      <h2>Most-Starred</h2>
       <a href="https://github.com/ykrishhh?tab=repositories" target="_blank">All repos →</a>
     </div>
     <div class="repo-grid">
-      {trendingRepos.map((r) => (
+      {starred.map((r) => (
         <a href={r.url} target="_blank" rel="noopener noreferrer" class="repo-card reveal">
           <div class="repo-top">
             <span class="repo-name">{r.name}</span>
