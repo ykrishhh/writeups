@@ -8,16 +8,6 @@ const OUT = resolve(__dirname, "../src/data/starred.ts");
 const USER = process.env.GITHUB_USER || "ykrishhh";
 const API = `https://api.github.com/users/${USER}/repos?sort=stargazers&per_page=100&type=owner`;
 
-interface Repo {
-  name: string;
-  html_url: string;
-  description: string | null;
-  stargazers_count: number;
-  fork: boolean;
-  archived: boolean;
-  language: string | null;
-}
-
 async function main() {
   const res = await fetch(API, {
     headers: { Accept: "application/vnd.github+json", "User-Agent": "writeups-build" },
@@ -26,7 +16,7 @@ async function main() {
     console.warn(`[fetch-repos] GitHub API returned ${res.status}; keeping committed fallback.`);
     process.exit(0);
   }
-  const repos: Repo[] = await res.json();
+  const repos = await res.json();
   const picked = repos
     .filter((r) => !r.fork && !r.archived && r.stargazers_count > 0)
     .sort((a, b) => b.stargazers_count - a.stargazers_count)
