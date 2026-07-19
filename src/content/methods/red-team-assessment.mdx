@@ -1,0 +1,98 @@
+---
+title: "Red Team Assessment Methodology"
+description: "A structured methodology for executing red team engagements: recon, vulnerability discovery, exploitation, and reporting — based on real-world .edu red team hunts."
+pubDate: 2026-04-10
+tags: ["red-team", "methodology", "pentesting", "reporting"]
+draft: false
+---
+
+## The problem
+
+Most penetration tests follow a scanner-first approach: run a tool, read the
+output, chase findings. This works for compliance audits but misses the
+chained, multi-step attacks that real adversaries use.
+
+This method inverts the workflow: **goal-first, tool-second.**
+
+## Phase 1: Goal decomposition
+
+Before scanning a single port, decompose the engagement goal into atomic
+objectives. For a red team hunt targeting an `.edu` domain:
+
+| Goal | Atomic objectives |
+|------|------------------|
+| Access student records | Find exposed DB, exploit SSRF, pivot from intranet |
+| Persistent access | Drop cron beacon, backdoor auth service |
+| Exfil sensitive data | Locate PII stores, compress, tunnel out |
+
+Each objective gets a **success criterion** (e.g., "read 10 rows from the
+student DB") and a **stop condition** (e.g., "3 hours without progress —
+escalate to different vector").
+
+## Phase 2: Passive recon (no direct touch)
+
+Start with sources that never touch the target:
+
+- Certificate transparency logs (`crt.sh`) — discover subdomains
+- DNS historical records (`SecurityTrails`) — find decommissioned services
+- GitHub dorking — search for leaked credentials in repos
+- Google dorking — exposed documents, config files, error pages
+
+**Output:** A target inventory ranked by attack surface (open ports,
+subdomain count, known tech stack).
+
+## Phase 3: Low-noise active recon
+
+Only hit the target with traffic that blends into normal background noise:
+
+- DNS resolution (standard recursive lookups)
+- HTTP HEAD requests (no body, no payload)
+- TLS handshake probes (look like browser preconnects)
+
+Avoid: aggressive SYN scans, directory bruteforce, or any endpoint fuzzing
+that triggers WAF/IDS alerts.
+
+## Phase 4: Chain construction
+
+This is where the real work happens. Each finding is a link in a potential
+chain. The method is to connect them:
+
+```
+Finding A: Subdomain exposes Grafana without auth
+Finding B: Grafana dashboard reveals internal service IPs
+Finding C: One internal service runs a known-vulnerable endpoint
+Chain: A → B → C → RCE on internal service
+```
+
+Document every chain even if it does not reach the final goal — partial chains
+are valuable for the defensive team to understand linkage risk.
+
+## Phase 5: Exploitation with proof
+
+Every exploitation step produces:
+
+1. **Reproducer** — exact commands and conditions
+2. **Impact** — what data or access was gained
+3. **PoC artifact** — a script, screenshot, or recorded session
+
+The PoC must be self-contained so the defensive team can replay it after
+fixes are applied.
+
+## Phase 6: Reporting
+
+The report is structured around chains, not CVEs:
+
+- **Executive summary** — how many chains reached the crown jewel
+- **Chain maps** — visual graph of linked findings
+- **Remediation priority** — which link in each chain to break first
+- **Technical appendix** — reproducer scripts and full output
+
+This methodology was validated during the OU.edu Red Team Hunt, where 6
+validated vulnerabilities were discovered and chained into a full
+student-record access path.
+
+## References
+
+- [ou-hunt-report repo](https://github.com/ykrishhh/ou-hunt-report)
+- [Red Team Ops — OffSec](https://www.offsec.com/courses/pen-300/)
+- [MITRE ATT&CK Framework](https://attack.mitre.org)

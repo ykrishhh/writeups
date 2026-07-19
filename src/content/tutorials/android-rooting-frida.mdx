@@ -1,0 +1,97 @@
+---
+title: "Android Root Security — Bypassing Attestation with Frida and eBPF"
+description: "A deep-dive tutorial on modern Android root detection mechanisms and how to bypass them using Frida hooks, KernelSU, and eBPF-based kernel introspection."
+pubDate: 2026-05-22
+tags: ["android", "frida", "ebpf", "rooting", "kernel"]
+draft: false
+---
+
+## The arms race
+
+Android's security model has evolved significantly. Modern apps no longer
+check for `su` binaries alone — they probe for SELinux policy violations,
+check `PROCESS_STATUS` through SafetyNet/Play Integrity, and scan for
+compromised kernel structures via eBPF programs.
+
+This tutorial walks through each layer and how to bypass it.
+
+## Layer 1: Userspace detection
+
+The simplest checks look for:
+
+- `/system/xbin/su` or `/system/bin/su` existence
+- `Build.TAGS.contains("test-keys")`
+- `Magisk` package presence
+- `selinux` context anomalies
+
+**Bypass:** Frida hooks each check method and returns the unrooted value.
+
+```javascript
+Java.perform(() => {
+  const File = Java.use('java.io.File');
+  File.exists.implementation = function () {
+    const path = this.getPath();
+    if (path.includes('su')) return false;
+    return this.exists.call(this);
+  };
+});
+```
+
+## Layer 2: Kernel-level detection
+
+Google's eBPF-based root detection attaches programs to tracepoints that
+monitor:
+
+- `sys_open` calls to blacklisted paths
+- `sys_execve` for suspicious binary launches
+- Process ancestry chains (is `zygote` spawning `sh`?)
+
+**Bypass:** KernelSU allows loading a kernel module that detaches the eBPF
+programs before they can log events.
+
+```c
+static int __init bypass_init(void) {
+  // Find the bpf_prog array in the kernel
+  struct bpf_prog_array *progs =
+    rcu_dereference(init_task.signal->bpf_prog_array);
+  if (progs) {
+    // Remove the attestation program from the array
+    bpf_prog_array_delete(progs, BPF_TRACE_RUN);
+  }
+  return 0;
+}
+```
+
+## Layer 3: Play Integrity (formerly SafetyNet)
+
+Google's Play Integrity API returns a verdict token signed by Google's servers.
+It attests to the device's boot state and system integrity. The token is
+cryptographically verified server-side, so it cannot be forged without the
+TSL signing key.
+
+**Bypass:** Route the attestation through a trusted environment. KernelSU
+provides a "sensitive byp" mode that temporarily masks the `unlocked_boot`
+flag and presents a locked-boot state to the Integrity API.
+
+```bash
+kernelsu --set-boot-state locked
+# Now call the Integrity API — it sees a locked device
+kernelsu --set-boot-state unlocked
+```
+
+## Putting it together
+
+A complete root-hiding setup combines:
+
+1. **KernelSU** for kernel-level masking
+2. **Frida** for userspace hooking
+3. **ZygiskNext** to hide root from Zygote forks
+
+Test each layer with `adb shell dmesg | grep integrity` to verify no kernel
+alerts are triggered. Then validate with the Play Integrity API tester app.
+
+## References
+
+- [android-rooting-masterclass repo](https://github.com/ykrishhh/android-rooting-masterclass)
+- [KernelSU documentation](https://kernelsu.org)
+- [Frida Android examples](https://github.com/frida/frida-examples)
