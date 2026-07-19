@@ -1,6 +1,6 @@
 ---
 title: "Red Team Assessment Methodology"
-description: "A structured methodology for executing red team engagements: recon, vulnerability discovery, exploitation, and reporting — based on real-world .edu red team hunts."
+description: "A structured methodology for executing red team engagements: recon, vulnerability discovery, exploitation, and reporting, based on real-world .edu red team hunts."
 pubDate: 2026-04-10
 tags: ["red-team", "methodology", "pentesting", "reporting"]
 draft: false
@@ -26,7 +26,7 @@ objectives. For a red team hunt targeting an `.edu` domain:
 | Exfil sensitive data | Locate PII stores, compress, tunnel out |
 
 Each objective gets a **success criterion** (e.g., "read 10 rows from the
-student DB") and a **stop condition** (e.g., "3 hours without progress —
+student DB") and a **stop condition** (e.g., "3 hours without progress,
 escalate to different vector").
 
 ## Phase 2: Passive recon (no direct touch)
@@ -64,7 +64,7 @@ Finding C: One internal service runs a known-vulnerable endpoint
 Chain: A → B → C → RCE on internal service
 ```
 
-Document every chain even if it does not reach the final goal — partial chains
+Document every chain even if it does not reach the final goal. Partial chains
 are valuable for the defensive team to understand linkage risk.
 
 ## Phase 5: Exploitation with proof

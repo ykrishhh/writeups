@@ -1,5 +1,5 @@
 ---
-title: "Android Root Security — Bypassing Attestation with Frida and eBPF"
+title: "Android Root Security: Bypassing Attestation with Frida and eBPF"
 description: "A deep-dive tutorial on modern Android root detection mechanisms and how to bypass them using Frida hooks, KernelSU, and eBPF-based kernel introspection."
 pubDate: 2026-05-22
 tags: ["android", "frida", "ebpf", "rooting", "kernel"]
@@ -9,7 +9,7 @@ draft: false
 ## The arms race
 
 Android's security model has evolved significantly. Modern apps no longer
-check for `su` binaries alone — they probe for SELinux policy violations,
+check for `su` binaries alone. They probe for SELinux policy violations,
 check `PROCESS_STATUS` through SafetyNet/Play Integrity, and scan for
 compromised kernel structures via eBPF programs.
 
@@ -75,7 +75,7 @@ flag and presents a locked-boot state to the Integrity API.
 
 ```bash
 kernelsu --set-boot-state locked
-# Now call the Integrity API — it sees a locked device
+# Now call the Integrity API. It sees a locked device
 kernelsu --set-boot-state unlocked
 ```
 
