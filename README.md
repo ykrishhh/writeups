@@ -38,3 +38,7 @@ GitHub Actions builds on push to `main` → GitHub Pages. CNAME points to `write
 ---
 
 *No badges. No fluff. Just content.*
+
+## Architecture
+
+Explore interactive diagrams of this project's architecture: [docs/architecture.html](docs/architecture.html).
